@@ -1,3 +1,6 @@
+/* Import clean font system: Nunito (UI), Playfair Display (titles), Cairo (Arabic) */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Playfair+Display:wght@500;600;700&family=Cairo:wght@400;600;700&display=swap');
+
 :root {
   --primary: #0077b6;
   --primary-dark: #005f87;
@@ -83,18 +86,23 @@ body {
   margin-bottom: 16px;
 }
 
+/* Main fancy heading (e.g. Welcome To) */
 h1 {
-  font-family: 'Lucida Calligraphy', cursive, Georgia, serif;
-  font-weight: normal;
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
   font-size: 1.9rem;
   margin: 10px 0 0;
+  letter-spacing: 0.5px;
 }
 
+/* Secondary heading (e.g. SKIN SURVIVAL GAME) */
 h2 {
   font-weight: 600;
   font-size: 1.2rem;
   margin: 8px 0 16px;
   font-family: 'Nunito', sans-serif;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
 /* Extra spacing ONLY for English heading & date */
@@ -108,8 +116,10 @@ html[lang="ar"] .date {
   letter-spacing: 0;
 }
 
+/* Script-like but still consistent title (e.g. Pressure Ulcer Day) */
 .italic-large {
-  font-family: 'Lucida Calligraphy', cursive, Georgia, serif;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
   font-size: 1.5rem;
   margin: -8px 0 8px;
 }
@@ -162,6 +172,7 @@ html[lang="ar"] .date {
   font-size: 0.95rem;
   text-align: center;
 }
+
 /* Welcome image */
 #welcomeSkinImage {
   width: 100%;
@@ -187,7 +198,7 @@ button#welcomeStartBtn {
   padding: 12px 32px;
   cursor: pointer;
   box-shadow: 0 4px 7px rgba(0,0,0,0.1);
-  margin-top: 6px;   /* closer to the text/image */
+  margin-top: 6px;
   margin-bottom: 16px;
   width: 100%;
   max-width: 260px;
@@ -197,7 +208,6 @@ button#welcomeStartBtn:hover {
   background-color: var(--primary-dark);
 }
 
-/* Game & End Screens – now NON-BOXY, full width */
 /* Game & End Screens – full width, centered vertically */
 #gameScreen, #endScreen {
   background: transparent;
@@ -212,8 +222,8 @@ button#welcomeStartBtn:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;              /* center vertically */
-  min-height: calc(100vh - 140px);      /* fill most of screen height */
+  justify-content: center;
+  min-height: calc(100vh - 140px);
 }
 
 /* Limit inner width of question card */
@@ -250,12 +260,12 @@ button#welcomeStartBtn:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 8px;       /* a bit less space */
+  margin-bottom: 8px;
 }
 
 #stageImage {
   width: 100%;
-  max-width: 380px;         /* bigger image */
+  max-width: 380px;
   height: auto;
   margin: 8px auto 4px;
   border-radius: 16px;
@@ -280,8 +290,8 @@ button#welcomeStartBtn:hover {
   background: #d4eefb;
   border-radius: 14px;
   border: 2px solid #4ca0cf;
-  padding: 10px 8px;        /* slightly smaller padding */
-  margin-bottom: 8px;       /* less vertical gap between buttons */
+  padding: 10px 8px;
+  margin-bottom: 8px;
   width: 100%;
   font-size: 0.95rem;
   cursor: pointer;
@@ -381,7 +391,7 @@ button#welcomeStartBtn:hover {
   border-radius: 999px;
   padding: 10px 28px;
   cursor: pointer;
-  margin-top: 12px;   /* 👈 this creates space under Generate Certificate */
+  margin-top: 12px;
 }
 
 #restartBtn:hover {
@@ -451,6 +461,7 @@ button#welcomeStartBtn:hover {
     margin-top: 12px;
   }
 }
+
 /* ========= RESPONSIVE LAYOUT ========= */
 
 /* Tablets and medium screens (>= 600px) */
@@ -502,7 +513,7 @@ button#welcomeStartBtn:hover {
 
   #gameScreen,
   #endScreen {
-    min-height: calc(100vh - 220px);  /* keep game/end nicely centered */
+    min-height: calc(100vh - 220px);
   }
 
   button#welcomeStartBtn,
@@ -517,10 +528,14 @@ button#welcomeStartBtn:hover {
     padding: 12px 10px;
   }
 }
+
+/* Override position for Start button (centered under text) */
 #welcomeStartBtn {
   margin: 20px auto 24px;
   display: block;
 }
+
+/* Certificate section styling */
 #certificateSection {
   margin-top: 16px;
   margin-bottom: 8px;
@@ -564,4 +579,3 @@ button#welcomeStartBtn:hover {
   text-decoration: underline;
   color: #0077b6;
 }
-
