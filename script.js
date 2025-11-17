@@ -335,7 +335,7 @@ function isArabicName(name) {
   // returns true if the name contains any Arabic letters
   return /[\u0600-\u06FF]/.test(name);
 }
-
+  
 function generateCertificate(name) {
     const useArabic = isArabicName(name);
     const templateSrc = useArabic ? 'certificate_ar.png' : 'certificate_en.png';
@@ -349,28 +349,32 @@ function generateCertificate(name) {
         canvas.height = img.height;
         const ctx = canvas.getContext('2d');
 
-        // draw background certificate
+        // Draw background certificate
         ctx.drawImage(img, 0, 0);
 
-        // ==== FONT SETTINGS =====
+        // ==== FONT SETTINGS (LARGE + BEAUTIFUL) ====
         if (useArabic) {
-            ctx.font = "bold 95px 'Amiri', 'Cairo', serif";  
+            ctx.font = "bold 120px 'Amiri', 'Cairo', serif";  
             ctx.direction = "rtl";
             ctx.textAlign = "center";
             ctx.fillStyle = "#C49A3A"; // gold color
         } else {
-            ctx.font = "bold 85px 'Playfair Display', 'Georgia', serif";
+            ctx.font = "bold 105px 'Playfair Display', 'Georgia', serif";
             ctx.textAlign = "center";
             ctx.fillStyle = "#C49A3A";
         }
 
-        // ==== TEXT POSITION (move down into correct center spot) ====
+        // ==== PERFECT Y POSITION (based on your template) ====
         const centerX = canvas.width / 2;
-        const centerY = useArabic ? canvas.height * 0.42 : canvas.height * 0.40;
+
+        // Arabic is visually higher so we push it more down
+        const centerY = useArabic 
+            ? canvas.height * 0.50   // push Arabic down
+            : canvas.height * 0.485; // English slightly above Arabic
 
         ctx.fillText(name, centerX, centerY);
 
-        // create downloadable PNG
+        // Create downloadable PNG
         const link = document.getElementById("downloadCertLink");
         link.href = canvas.toDataURL("image/png");
         link.download = useArabic
@@ -379,6 +383,7 @@ function generateCertificate(name) {
         link.style.display = "block";
     };
 }
+  
 
   img.onerror = () => {
     alert(currentLanguage === 'ar'
