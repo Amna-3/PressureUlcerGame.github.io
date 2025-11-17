@@ -382,8 +382,6 @@ function generateCertificate(name) {
             : `PressureUlcerCertificate-${name}-en.png`;
         link.style.display = "block";
     };
-}
-  
 
   img.onerror = () => {
     alert(currentLanguage === 'ar'
