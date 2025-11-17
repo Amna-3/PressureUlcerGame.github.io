@@ -191,22 +191,40 @@ button#welcomeStartBtn:hover {
 }
 
 /* Game & End Screens – now NON-BOXY, full width */
+/* Game & End Screens – full width, centered vertically */
 #gameScreen, #endScreen {
-  display: none;
-  background: transparent;          /* no card background */
-  box-shadow: none;                 /* no drop shadow */
-  border-radius: 0;                 /* no rounded card edges */
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
   max-width: 900px;
   width: 100%;
-  margin: 16px auto 0;
-  padding: 0 0 32px;
+  margin: 0 auto;
+  padding: 16px 0 32px;
   box-sizing: border-box;
+
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;      /* start at the top, no big empty gap */
-  min-height: auto;                 /* let height be natural */
+  justify-content: center;              /* center vertically */
+  min-height: calc(100vh - 140px);      /* fill most of screen height */
 }
+
+/* Limit inner width of question card */
+#interventionSection {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* End screen elements already centered by flex; this just keeps them tight */
+#endScreen .winning-sticker,
+#endScreen #finalMessage,
+#endScreen #finalScore,
+#endScreen #restartBtn {
+  text-align: center;
+}
+
 #stageProgress {
   font-size: 0.9rem;
   color: #555;
