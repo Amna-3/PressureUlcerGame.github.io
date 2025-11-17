@@ -13,6 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const languageToggle = document.getElementById('languageToggle');
   const stageProgress = document.getElementById('stageProgress');
 
+  // Modal elements for image zoom
+  const imageModal = document.getElementById('imageModal');
+  const imageModalImg = document.getElementById('imageModalImg');
+  const imageModalClose = document.getElementById('imageModalClose');
+
   let currentLanguage = 'en';
 
   const translations = {
@@ -113,10 +118,9 @@ document.addEventListener('DOMContentLoaded', () => {
   languageToggle.onclick = () => {
     currentLanguage = currentLanguage === 'en' ? 'ar' : 'en';
     updateLanguage();
-    // If already in game or end screen, refresh current stage text or final text
-    if (gameScreen.style.display === 'flex') {
+    if (gameScreen.style.display === 'flex' || gameScreen.style.display === 'block') {
       showInterventions(stageOrder[stageIndex]);
-    } else if (endScreen.style.display === 'flex') {
+    } else if (endScreen.style.display === 'flex' || endScreen.style.display === 'block') {
       finalScoreEl.textContent =
         translations[currentLanguage].finalScore +
         score + ' ' +
@@ -145,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
   welcomeStartBtn.onclick = () => {
     welcomeScreen.style.display = 'none';
     endScreen.style.display = 'none';
-    gameScreen.style.display = 'flex';
+    gameScreen.style.display = 'block';
     score = 0;
     stageIndex = 0;
     showInterventions(stageOrder[stageIndex]);
@@ -156,6 +160,16 @@ document.addEventListener('DOMContentLoaded', () => {
     endScreen.style.display = 'none';
     welcomeScreen.style.display = 'block';
   };
+
+  // Helper: shuffle an array (for randomizing answers)
+  function shuffleArray(arr) {
+    const copy = [...arr];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
 
   function showInterventions(stage) {
     const langBundle = translations[currentLanguage];
@@ -175,13 +189,16 @@ document.addEventListener('DOMContentLoaded', () => {
     stageImage.src = `stage_${stage}_final.png`;
     stageImage.alt = `Stage ${stage} image`;
 
+    // RANDOMIZE interventions each time
+    const shuffledInterventions = shuffleArray(stageData.interventions);
+
     interventionsDiv.innerHTML = '';
 
-    stageData.interventions.forEach(({ text, correct }) => {
+    shuffledInterventions.forEach(({ text, correct }) => {
       const b = document.createElement('button');
       b.classList.add('intervention-btn');
       b.textContent = text;
-      b.dataset.correct = correct;
+      b.dataset.correct = String(correct);
       b.onclick = handleIntervention;
       interventionsDiv.appendChild(b);
     });
@@ -227,12 +244,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function endGame() {
     gameScreen.style.display = 'none';
-    endScreen.style.display = 'flex';
+    endScreen.style.display = 'block';
     finalScoreEl.textContent =
       translations[currentLanguage].finalScore +
       score + ' ' +
       (currentLanguage === 'ar' ? 'نقطة' : 'points');
   }
+
+  // IMAGE ZOOM BEHAVIOR
+  stageImage.addEventListener('click', () => {
+    if (!stageImage.src) return;
+    imageModalImg.src = stageImage.src;
+    imageModal.style.display = 'flex';
+    imageModal.setAttribute('aria-hidden', 'false');
+  });
+
+  imageModalClose.addEventListener('click', () => {
+    imageModal.style.display = 'none';
+    imageModal.setAttribute('aria-hidden', 'true');
+  });
+
+  imageModal.addEventListener('click', (e) => {
+    // Click outside the image closes the modal
+    if (e.target === imageModal) {
+      imageModal.style.display = 'none';
+      imageModal.setAttribute('aria-hidden', 'true');
+    }
+  });
 
   // Initialize correct language on load
   updateLanguage();
