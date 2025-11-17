@@ -367,7 +367,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const centerX = canvas.width / 2;
       const centerY = useArabic
         ? canvas.height * 0.50   // Arabic a bit lower
-        : canvas.height * 0.50; // English slightly above
+        : canvas.height * 0.55; // English slightly above
 
       ctx.fillText(name, centerX, centerY);
 
