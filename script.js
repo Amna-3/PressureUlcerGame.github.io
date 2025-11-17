@@ -18,6 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const imageModalImg = document.getElementById('imageModalImg');
   const imageModalClose = document.getElementById('imageModalClose');
 
+  // Certificate elements
+  const userNameInput = document.getElementById('userNameInput');
+  const generateCertBtn = document.getElementById('generateCertBtn');
+  const downloadCertLink = document.getElementById('downloadCertLink');
+
   // Make sure game and end screens are hidden at the start
   gameScreen.style.display = 'none';
   endScreen.style.display = 'none';
@@ -66,7 +71,10 @@ document.addEventListener('DOMContentLoaded', () => {
         incorrect: '❌ Incorrect intervention. 0 points'
       },
       finalScore: 'Your final score: ',
-      stageOf: (current, total) => `Stage ${current} of ${total}`
+      stageOf: (current, total) => `Stage ${current} of ${total}`,
+      certLabel: 'Enter your name to get a certificate:',
+      certButton: 'Generate Certificate',
+      certDownload: 'Download Certificate'
     },
     ar: {
       languageButton: 'English',
@@ -109,7 +117,10 @@ document.addEventListener('DOMContentLoaded', () => {
         incorrect: '❌ تدخل خاطئ. 0 نقاط'
       },
       finalScore: 'نتيجتك النهائية: ',
-      stageOf: (current, total) => `المرحلة ${current} من ${total}`
+      stageOf: (current, total) => `المرحلة ${current} من ${total}`,
+      certLabel: 'اكتب اسمك للحصول على شهادة:',
+      certButton: 'إنشاء الشهادة',
+      certDownload: 'تحميل الشهادة'
     }
   };
 
@@ -130,6 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
         translations[currentLanguage].finalScore +
         score + ' ' +
         (currentLanguage === 'ar' ? 'نقطة' : 'points');
+      updateCertificateTexts();
     }
   };
 
@@ -141,6 +153,13 @@ document.addEventListener('DOMContentLoaded', () => {
       el.textContent = el.getAttribute('data-' + lang);
     });
 
+    // placeholder for input
+    if (userNameInput) {
+      const phAttr = lang === 'en' ? 'data-en-placeholder' : 'data-ar-placeholder';
+      const ph = userNameInput.getAttribute(phAttr);
+      if (ph) userNameInput.placeholder = ph;
+    }
+
     if (lang === 'ar') {
       document.documentElement.setAttribute('dir', 'rtl');
       document.documentElement.setAttribute('lang', 'ar');
@@ -148,19 +167,31 @@ document.addEventListener('DOMContentLoaded', () => {
       document.documentElement.setAttribute('dir', 'ltr');
       document.documentElement.setAttribute('lang', 'en');
     }
+
+    updateCertificateTexts();
+  }
+
+  function updateCertificateTexts() {
+    if (!userNameInput) return;
+    const lang = currentLanguage;
+    const certLabel = document.querySelector('#certificateSection label');
+    if (certLabel) certLabel.textContent = translations[lang].certLabel;
+    if (generateCertBtn) generateCertBtn.textContent = translations[lang].certButton;
+    if (downloadCertLink && downloadCertLink.style.display !== 'none') {
+      downloadCertLink.textContent = translations[lang].certDownload;
+    }
   }
 
   // Start game
   welcomeStartBtn.onclick = () => {
     welcomeScreen.style.display = 'none';
     endScreen.style.display = 'none';
-    gameScreen.style.display = 'flex';   // flex for centered layout
+    gameScreen.style.display = 'flex';
 
     score = 0;
     stageIndex = 0;
     showInterventions(stageOrder[stageIndex]);
 
-    // Scroll to top so the question isn't half hidden
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -169,11 +200,10 @@ document.addEventListener('DOMContentLoaded', () => {
     endScreen.style.display = 'none';
     welcomeScreen.style.display = 'block';
 
-    // Scroll to top when going back to welcome
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Helper: shuffle an array (for randomizing answers)
+  // Helper: shuffle an array
   function shuffleArray(arr) {
     const copy = [...arr];
     for (let i = copy.length - 1; i > 0; i--) {
@@ -197,11 +227,9 @@ document.addEventListener('DOMContentLoaded', () => {
     stageHeader.textContent = stageData.header;
     stageProgress.textContent = langBundle.stageOf(currentStageNumber, totalStages);
 
-    // Set stage image (make sure these exist in your repo)
     stageImage.src = `stage_${stage}_final.png`;
     stageImage.alt = `Stage ${stage} image`;
 
-    // RANDOMIZE interventions each time
     const shuffledInterventions = shuffleArray(stageData.interventions);
 
     interventionsDiv.innerHTML = '';
@@ -227,11 +255,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (correct) {
       btn.classList.add('correct');
       feedbackEl.textContent = translations[currentLanguage].feedback.correct;
-      score += 10;   // +10 for correct
+      score += 10;
     } else {
       btn.classList.add('wrong');
       feedbackEl.textContent = translations[currentLanguage].feedback.incorrect;
-      // No negative score for wrong answer
+      // no minus points
     }
 
     buttons.forEach(b => {
@@ -250,25 +278,27 @@ document.addEventListener('DOMContentLoaded', () => {
       endGame();
     } else {
       showInterventions(stageOrder[stageIndex]);
-
-      // Scroll the page gently to the very top
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
   function endGame() {
     gameScreen.style.display = 'none';
-    endScreen.style.display = 'flex';   // flex for centered layout
+    endScreen.style.display = 'flex';
 
     finalScoreEl.textContent =
       translations[currentLanguage].finalScore +
       score + ' ' +
       (currentLanguage === 'ar' ? 'نقطة' : 'points');
 
+    // reset certificate download link
+    downloadCertLink.style.display = 'none';
+    downloadCertLink.href = '#';
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // IMAGE ZOOM BEHAVIOR
+  // IMAGE ZOOM
   stageImage.addEventListener('click', () => {
     if (!stageImage.src) return;
     imageModalImg.src = stageImage.src;
@@ -282,13 +312,60 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   imageModal.addEventListener('click', (e) => {
-    // Click outside the image closes the modal
     if (e.target === imageModal) {
       imageModal.style.display = 'none';
       imageModal.setAttribute('aria-hidden', 'true');
     }
   });
 
-  // Initialize correct language on load
+  // CERTIFICATE GENERATION
+  generateCertBtn.addEventListener('click', () => {
+    const name = (userNameInput.value || '').trim();
+    if (!name) {
+      alert(currentLanguage === 'ar'
+        ? 'من فضلك اكتب اسمك أولاً'
+        : 'Please enter your name first');
+      return;
+    }
+    generateCertificate(name);
+  });
+
+  function generateCertificate(name) {
+    const img = new Image();
+    img.src = 'certificate_template.png';  // make sure this file exists in your repo
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+
+      // Draw background certificate
+      ctx.drawImage(img, 0, 0);
+
+      // Draw the name in the middle (adjust font/position to match your design)
+      ctx.font = '48px "Times New Roman"';
+      ctx.fillStyle = '#333333';
+      ctx.textAlign = 'center';
+
+      const x = canvas.width / 2;
+      const y = canvas.height * 0.55; // tweak this number to move name up/down
+      ctx.fillText(name, x, y);
+
+      // Convert to image and prepare download link
+      const dataURL = canvas.toDataURL('image/png');
+      downloadCertLink.href = dataURL;
+      downloadCertLink.download = `SkinSurvivalCertificate-${name}.png`;
+      downloadCertLink.style.display = 'inline-block';
+      downloadCertLink.textContent = translations[currentLanguage].certDownload;
+    };
+
+    img.onerror = () => {
+      alert(currentLanguage === 'ar'
+        ? 'تعذّر تحميل قالب الشهادة. تأكد من وجود الملف certificate_template.png في المشروع.'
+        : 'Could not load certificate template. Make sure certificate_template.png exists.');
+    };
+  }
+
+  // Initialize language on load
   updateLanguage();
 });
