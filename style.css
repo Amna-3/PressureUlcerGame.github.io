@@ -82,20 +82,12 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 24px;
 }
 
 .hero-left,
 .hero-right {
   width: 100%;
-}
-
-.hero-left {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  margin-top: 8px;
 }
 
 .hero-right {
@@ -108,7 +100,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 24px;
   width: 100%;
   max-width: 360px;
 }
@@ -118,7 +110,7 @@ body {
   width: 100%;
   max-width: 140px;
   height: auto;
-  margin: 20px auto 6px;
+  margin: 32px auto 12px;
   display: block;
   border-radius: 12px;
 }
@@ -126,7 +118,7 @@ body {
 .university-name {
   font-size: 1rem;
   font-weight: 500;
-  margin-bottom: 8px;
+  margin-bottom: 16px;
 }
 
 /* Main fancy heading (e.g. Welcome To) */
@@ -134,7 +126,7 @@ h1 {
   font-family: 'Playfair Display', serif;
   font-weight: 600;
   font-size: 1.9rem;
-  margin: 6px 0 0;
+  margin: 10px 0 0;
   letter-spacing: 0.5px;
 }
 
@@ -142,7 +134,7 @@ h1 {
 h2 {
   font-weight: 600;
   font-size: 1.2rem;
-  margin: 4px 0 8px;
+  margin: 8px 0 16px;
   font-family: 'Nunito', sans-serif;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -164,7 +156,7 @@ html[lang="ar"] .date {
   font-family: 'Playfair Display', serif;
   font-style: italic;
   font-size: 1.5rem;
-  margin: -2px 0 6px;
+  margin: -4px 0 8px;
 }
 
 .arabic-text {
@@ -178,14 +170,14 @@ html[lang="ar"] .date {
 .english-text {
   font-size: 1rem;
   max-width: 560px;
-  margin: 10px auto 6px;
+  margin: 16px auto 12px;
   line-height: 1.5;
 }
 
 .date {
   font-weight: 700;
   font-size: 0.95rem;
-  margin: 6px 0 10px;
+  margin: 8px 0 18px;
   font-family: 'Nunito', sans-serif;
 }
 
@@ -193,7 +185,7 @@ html[lang="ar"] .date {
 .decorative-line {
   display: flex;
   justify-content: center;
-  margin: 2px 0 6px;
+  margin: 4px 0 10px;
 }
 .decorative-line svg {
   stroke: #a3c9d2;
@@ -264,7 +256,7 @@ button#welcomeStartBtn {
   padding: 12px 32px;
   cursor: pointer;
   box-shadow: 0 4px 7px rgba(0,0,0,0.1);
-  margin: 12px auto;
+  margin: 16px auto 18px;
   width: 100%;
   max-width: 260px;
   display: block;
@@ -604,7 +596,7 @@ button#welcomeStartBtn:hover {
   }
 
   .hero-left {
-    width: 52%;
+    width: 55%;
     text-align: center;  /* center everything on the mid-line */
   }
 
@@ -613,19 +605,11 @@ button#welcomeStartBtn:hover {
   }
 
   .hero-right {
-    width: 42%;
+    width: 40%;
   }
 
   .hero-image-column {
     max-width: 100%;
-  }
-
-  #stopSignImage {
-    max-width: 220px;
-  }
-
-  #welcomeSkinImage {
-    max-width: 360px;
   }
 }
 
