@@ -24,7 +24,8 @@ html[dir="rtl"] [data-ar] {
 /* Base layout */
 body {
   font-family: 'Nunito', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background-color: var(--bg);
+  /* use same color as page so there are no side stripes */
+  background-color: var(--page-bg);
   margin: 0;
   padding: 0;
   min-height: 100vh;
@@ -70,7 +71,21 @@ body {
   background-color: var(--primary-dark);
 }
 
-/* Welcome Screen */
+/* ===== WELCOME / HERO SECTION ===== */
+
+/* Hero wrapper: stacked on mobile, 2-column on large screens */
+#welcomeHero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.hero-left,
+.hero-right {
+  width: 100%;
+}
+
 .logo-image {
   width: 100%;
   max-width: 120px;
@@ -173,7 +188,16 @@ html[lang="ar"] .date {
   text-align: center;
 }
 
-/* Welcome image */
+/* Stop sign image on hero right */
+#stopSignImage {
+  width: 100%;
+  max-width: 260px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Welcome image (pressure sores chart) below hero */
 #welcomeSkinImage {
   width: 100%;
   max-width: 600px;
@@ -529,7 +553,46 @@ button#welcomeStartBtn:hover {
   }
 }
 
-/* Override position for Start button (centered under text) */
+/* On wide screens: 2-column hero (logo/text + stop sign) */
+@media (min-width: 900px) {
+  #welcomeHero {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .hero-left {
+    width: 56%;
+    text-align: left;
+  }
+
+  html[dir="rtl"] .hero-left {
+    text-align: right;
+  }
+
+  .hero-right {
+    width: 38%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .logo-image {
+    margin-top: 16px;
+    margin-bottom: 10px;
+  }
+
+  .english-text,
+  .arabic-text {
+    max-width: none;
+  }
+
+  #welcomeStartBtn {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+/* Override position for Start button (centered under text in mobile) */
 #welcomeStartBtn {
   margin: 20px auto 24px;
   display: block;
