@@ -179,4 +179,250 @@ button#welcomeStartBtn {
   border-radius: 999px;
   padding: 12px 32px;
   cursor: pointer;
-  box
+  box-shadow: 0 4px 7px rgba(0,0,0,0.1);
+  margin-top: 6px;   /* closer to the text/image */
+  margin-bottom: 16px;
+  width: 100%;
+  max-width: 260px;
+}
+
+button#welcomeStartBtn:hover {
+  background-color: var(--primary-dark);
+}
+
+/* Game & End Screens – now NON-BOXY, full width */
+#gameScreen,
+#endScreen {
+  display: none;
+  background: transparent;      /* no card background */
+  border-radius: 0;             /* straight edges */
+  box-shadow: none;             /* no shadow box */
+  max-width: 900px;
+  width: 100%;
+  margin: 16px auto 0;
+  padding: 16px 0 32px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#stageProgress {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0 0 6px;
+}
+
+#stageHeader {
+  font-size: 1.2rem;
+  color: #00414f;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+/* Stage image - BIGGER */
+.stage-image-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+#stageImage {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  margin: 10px auto 6px;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  cursor: pointer;
+}
+
+.tap-hint {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+/* Interventions */
+#interventions {
+  margin-top: 8px;
+  max-width: 420px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.intervention-btn {
+  background: #d4eefb;
+  border-radius: 14px;
+  border: 2px solid #4ca0cf;
+  padding: 12px;
+  margin-bottom: 10px;
+  width: 100%;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.1s ease;
+  user-select: none;
+  text-align: center;
+}
+
+.intervention-btn:hover:not(:disabled) {
+  background: #92d1f5;
+  transform: translateY(-1px);
+}
+
+.intervention-btn.correct {
+  background-color: #90e090 !important;
+  color: #027a0c;
+  font-weight: 700;
+}
+
+.intervention-btn.wrong {
+  background-color: #f78b8b !important;
+  color: #7a0505;
+  font-weight: 700;
+}
+
+.intervention-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+/* Feedback & next button */
+#feedback {
+  margin-top: 10px;
+  font-weight: 700;
+  font-size: 1rem;
+  min-height: 24px;
+}
+
+#nextStageBtn {
+  margin-top: 16px;
+  background-color: var(--primary);
+  color: white;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 28px;
+  display: none;
+  user-select: none;
+}
+
+#nextStageBtn:hover {
+  background-color: var(--primary-dark);
+}
+
+/* End Screen */
+#finalMessage {
+  font-size: 1.2rem;
+  font-style: italic;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+#finalScore {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+/* Winning Sticker */
+.winning-sticker {
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700);
+  border-radius: 50%;
+  border: 4px solid #b8860b;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #b8860b;
+  margin: 10px auto;
+  animation: bounce 1s ease-in-out infinite alternate;
+}
+
+@keyframes bounce {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-6px); }
+}
+
+#restartBtn {
+  font-weight: 700;
+  font-size: 0.95rem;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 28px;
+  cursor: pointer;
+}
+
+#restartBtn:hover {
+  background-color: var(--primary-dark);
+}
+
+/* IMAGE MODAL (zoom) */
+.image-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.image-modal-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 80vh;
+}
+
+.image-modal-content img {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+
+.image-modal-close {
+  position: absolute;
+  top: -32px;
+  right: 0;
+  border: none;
+  background: transparent;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+/* Mobile tweaks */
+@media (max-width: 480px) {
+  #container {
+    padding: 16px 10px 24px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1rem;
+  }
+
+  .italic-large {
+    font-size: 1.25rem;
+  }
+
+  .english-text,
+  .arabic-text {
+    font-size: 0.95rem;
+  }
+
+  #gameScreen,
+  #endScreen {
+    margin-top: 12px;
+  }
+}
