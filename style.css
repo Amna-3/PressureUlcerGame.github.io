@@ -191,20 +191,22 @@ button#welcomeStartBtn:hover {
 }
 
 /* Game & End Screens – now NON-BOXY, full width */
-#gameScreen,
-#endScreen {
+#gameScreen, #endScreen {
   display: none;
-  background: transparent;      /* no card background */
-  border-radius: 0;             /* straight edges */
-  box-shadow: none;             /* no shadow box */
+  background: transparent;          /* no card background */
+  box-shadow: none;                 /* no drop shadow */
+  border-radius: 0;                 /* no rounded card edges */
   max-width: 900px;
   width: 100%;
   margin: 16px auto 0;
-  padding: 16px 0 32px;
+  padding: 0 0 32px;
   box-sizing: border-box;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;      /* start at the top, no big empty gap */
+  min-height: auto;                 /* let height be natural */
 }
-
 #stageProgress {
   font-size: 0.9rem;
   color: #555;
@@ -223,14 +225,14 @@ button#welcomeStartBtn:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 8px;       /* a bit less space */
 }
 
 #stageImage {
   width: 100%;
-  max-width: 320px;
+  max-width: 380px;         /* bigger image */
   height: auto;
-  margin: 10px auto 6px;
+  margin: 8px auto 4px;
   border-radius: 16px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.15);
   cursor: pointer;
@@ -241,9 +243,8 @@ button#welcomeStartBtn:hover {
   color: #666;
 }
 
-/* Interventions */
 #interventions {
-  margin-top: 8px;
+  margin-top: 4px;
   max-width: 420px;
   width: 100%;
   margin-left: auto;
@@ -254,14 +255,12 @@ button#welcomeStartBtn:hover {
   background: #d4eefb;
   border-radius: 14px;
   border: 2px solid #4ca0cf;
-  padding: 12px;
-  margin-bottom: 10px;
+  padding: 10px 8px;        /* slightly smaller padding */
+  margin-bottom: 8px;       /* less vertical gap between buttons */
   width: 100%;
   font-size: 0.95rem;
   cursor: pointer;
   transition: background 0.25s ease, transform 0.1s ease;
-  user-select: none;
-  text-align: center;
 }
 
 .intervention-btn:hover:not(:disabled) {
