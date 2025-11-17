@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Skin Survival - Pressure Ulcer Game</title>
+<style>
+  body {
+    font-family: 'Georgia', serif;
+    background-color: #d9e9f0; /* light blue background */
+    margin: 0; padding: 20px;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    color: #333;
+  }
+  #container {
+    background: #fefbf4; /* warm off-white container */
+    border-radius: 20px;
+    max-width: 420px;
+    width: 100%;
+    padding: 50px 38px 0px 38px;
+    box-sizing: border-box;
+    text-align: center;
+    position: relative;
+    user-select: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.07);
+  }
+  /* Complete black border */
+  #container::before {
+    content: "";
+    position: absolute;
+    top: 8px; bottom: 8px; left: 8px; right: 8px;
+    border: 1.5px solid #000;
+    border-radius: 28px;
+    pointer-events: none;
+  }
+  /* Content layering */
+  #container > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Language Toggle */
+  #languageToggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #0077b6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    z-index: 10;
+  }
+  #languageToggle:hover {
+    background-color: #005f87;
+  }
+
+  /* Welcome Screen styling */
+  .university-name {
+    font-size: 15px;
+    font-weight: normal;
+    margin-bottom: 22px;
+  }
+  h1 {
+    font-family: 'Lucida Calligraphy', cursive, Georgia, serif;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 34px;
+    margin: 8px 0 0 0;
+  }
+  h2 {
+    font-weight: normal;
+    font-size: 22px;
+    letter-spacing: 3.5px;
+    margin: 6px 0 14px 0;
+    font-family: 'Arial', serif;
+  }
+  .italic-large {
+    font-family: 'Lucida Calligraphy', cursive, Georgia, serif;
+    font-size: 26px;
+    margin: -14px 0 14px 0;
+  }
+  .arabic-text {
+    font-family: 'Times New Roman', serif;
+    font-size: 21px;
+    direction: rtl;
+    margin: 10px 38px 20px 38px;
+    font-weight: normal;
+  }
+  .english-text {
+    font-size: 17px;
+    max-width: 320px;
+    margin: 20px auto 28px auto;
+    line-height: 1.5;
+    font-weight: normal;
+  }
+  .date {
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: 3.5px;
+    margin-bottom: 48px;
+    font-family: 'Arial Black', Gadget, sans-serif;
+  }
+  /* Decorative lines */
+  .decorative-line {
+    display: flex;
+    justify-content: center;
+    margin: 6px 0 14px 0;
+  }
+  .decorative-line svg {
+    stroke: #a3c9d2;
+    stroke-width: 2px;
+    height: 18px;
+    width: 90px;
+  }
+  /* Credits text */
+  #credits {
+    font-size: 13px;
+    font-weight: normal;
+    margin: 2px 0 0 0;
+  }
+  #credits + #credits {
+    margin-bottom: 0px;
+  }
+  /* Logo image */
+  #logoImage {
+    width: 100%;
+    max-width: 120px;
+    height: auto;
+    margin: 0 auto 20px auto;
+    border-radius: 10px;
+  }
+  /* Welcome skin image */
+  #welcomeSkinImage {
+    width: 100%;
+    max-width: 350px;
+    height: auto;
+    margin: 20px auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  button#welcomeStartBtn {
+    font-weight: 700;
+    font-size: 1.25rem;
+    background-color: #0077b6;
+    color: white;
+    border: none;
+    border-radius: 14px;
+    padding: 14px 40px;
+    cursor: pointer;
+    box-shadow: 0 4px 7px rgba(0,0,0,0.1);
+    margin-top: 10px;
+    margin-bottom: 40px;
+  }
+  button#welcomeStartBtn:hover {
+    background-color: #005f87;
+  }
+
+  /* Game Screens styling */
+  #gameScreen, #endScreen {
+    display: none;
+    background: #fdfdfa;
+    border-radius: 14px;
+    padding: 24px 26px 32px;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+    max-width: 420px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;      /* Centers content horizontally */
+    justify-content: center;  /* Center content vertically */
+    min-height: 400px;
+    box-sizing: border-box;
+    text-align: center;
+  }
+  #gameTitle {
+    font-size: 22px;
+    color: #00414f;
+    font-weight: 700;
+    margin-bottom: 14px;
+    text-align: center;
+    width: 100%;
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  /* Stage image in game */
+  #stageImage {
+    width: 100%;
+    max-width: 150px; /* Reduced size for clearer display */
+    height: auto;
+    margin: 15px auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+  #stageOptions {
+    max-width: 320px;   /* Match max width to gameTitle */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin: 0 auto;
+  }
+  .stage-option {
+    background: #d4eefb;
+    border: 2px solid #4ca0cf;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    user-select:none;
+    text-align: center;
+    width: 100%;
+  }
+  .stage-option:hover {
+    background: #92d1f5;
+  }
+  .stage-option.selected {
+    background: #0077b6;
+    color: #fff;
+    font-weight: 700;
+  }
+  #interventions {
+    margin-top: 20px;
+    max-width: 320px;
+    width: 100%;
+  }
+  .intervention-btn {
+    background: #b8ddef;
+    border-radius: 10px;
+    border: none;
+    padding: 14px;
+    margin-bottom: 14px;
+    width: 100%;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    user-select:none;
+    text-align: center;
+  }
+  .intervention-btn:hover:not(:disabled) {
+    background: #87c4f9;
+  }
+  .intervention-btn.correct {
+    background-color: #90e090 !important;
+    color: #027a0c;
+    font-weight: 700;
+  }
+  .intervention-btn.wrong {
+    background-color: #f78b8b !important;
+    color: #7a0505;
+    font-weight: 700;
+  }
+  .intervention-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  #feedback {
+    margin-top: 16px;
+    font-weight: 700;
+    font-size: 1.15rem;
+    min-height: 24px;
+    text-align: center;
+  }
+  #nextStageBtn {
+    margin-top: 24px;
+    background-color: #0077b6;
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 32px;
+    display: none;
+    user-select:none;
+    align-self: center;
+  }
+  #nextStageBtn:hover {
+    background-color: #005a85;
+  }
+  #finalMessage {
+    font-size: 1.5rem;
+    font-style: italic;
+    font-weight: 400;
+    margin-bottom: 14px;
+  }
+  #finalScore {
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin-bottom: 32px;
+  }
+  /* Winning Sticker */
+  .winning-sticker {
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700);
+    border-radius: 50%;
+    border: 4px solid #b8860b;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #b8860b;
+    margin: 20px auto 10px;
+    animation: bounce 1s ease-in-out infinite alternate;
+  }
+  @keyframes bounce {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-10px); }
+  }
+  #restartBtn {
+    font-weight: 700;
+    font-size: 1.1rem;
+    background-color: #0077b6;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 32px;
+    cursor: pointer;
+  }
+  #restartBtn:hover {
+    background-color: #005a85;
+  }
+</style>
+</head>
+<body>
+
+<div id="container" role="main" aria-label="Welcome and start screen">
+  
+  <!-- Language Toggle Button -->
+  <button id="languageToggle">العربية</button>
+
+  <!-- Welcome Screen -->
+  <section id="welcomeScreen" aria-label="Welcome Screen">
+    <img id="universityLogo" src="university_logo.jpeg" alt="University Logo" style="width: 100%; max-width: 100px; height: auto; margin: 0 auto 15px auto; display: block;" />
+    <p class="university-name" data-en="Rak Medical And Health Sciences University." data-ar="جامعة رأس الخيمة للعلوم الطبية والصحية">Rak Medical And Health Sciences University.</p>
+    <h1 data-en="Welcome To" data-ar="مرحباً بك في">Welcome To</h1>
+    <h2 data-en="SKIN SURVIVAL GAME" data-ar="لعبة إنقاذ الجلد">SKIN SURVIVAL GAME</h2>
+
+    <div class="decorative-line" aria-hidden="true">
+      <svg viewBox="0 0 120 20" preserveAspectRatio="none" >
+        <path d="M5 10 q10 -6 15 0 t15 0 t15 0 t15 0 t15 0 t15 0" fill="none" stroke="#a3c9d2" stroke-width="2"/>
+      </svg>
+    </div>
+
+    <div class="italic-large" data-en="Pressure Ulcer" data-ar="قرح الفراش">Pressure Ulcer</div>
+    <div class="italic-large" data-en="Day" data-ar="اليوم">Day</div>
+
+    <div class="arabic-text" data-en="International Pressure Ulcer Prevention Day" data-ar="اليوم العالمي للوقاية من قرح الفراش">اليوم العالمي للوقاية من قرح الفراش</div>
+
+    <div class="decorative-line" aria-hidden="true">
+      <svg viewBox="0 0 120 20" preserveAspectRatio="none">
+        <path d="M5 10 q10 -6 15 0 t15 0 t15 0 t15 0 t15 0 t15 0" fill="none" stroke="#a3c9d2" stroke-width="2"/>
+      </svg>
+    </div>
+
+    <img id="welcomeSkinImage" src="StrokeSmart.jpg" alt="Pressure Ulcer Stages" />
+
+    <p class="english-text" data-en="Are you ready to select the proper action for each stage?" data-ar="هل أنت مستعد لاختيار الإجراء المناسب لكل مرحلة؟">Are you ready to select the proper action for each stage?</p>
+
+    <div class="date" aria-label="Date" data-en="NOVEMBER 19, 2025" data-ar="19 نوفمبر 2025">NOVEMBER 19, 2025</div>
+
+    <p id="credits" aria-label="Game author" data-en="Done by: Amna Sulieman Yassin" data-ar="من إعداد: أمنة سليمان ياسين">Done by: Amna Sulieman Yassin</p>
+    <p id="credits" aria-label="Game supervisor" data-en="Supervised by: Dr. Basma Maher" data-ar="إشراف: د. بسمة ماهر">Supervised by: Dr. Basma Maher</p>
+
+    <button id="welcomeStartBtn" aria-label="Start Game" data-en="Start Game" data-ar="ابدأ اللعبة">Start Game</button>
+  </section>
+
+  <!-- Game Screen -->
+  <section id="gameScreen" aria-label="Game Screen">
+    <div id="interventionSection">
+      <h3 id="stageHeader"></h3>
+      <img id="stageImage" src="" alt="Stage Image" />
+      <div id="interventions"></div>
+      <div id="feedback" aria-live="polite"></div>
+      <button id="nextStageBtn" data-en="Next Stage" data-ar="المرحلة التالية">Next Stage</button>
+    </div>
+  </section>
+
+  <!-- End Screen -->
+  <section id="endScreen" aria-label="Game Completion" style="display:none;">
+    <div class="winning-sticker">🏆</div>
+    <div id="finalMessage" data-en="Congratulations! You are a Skin Savior! 🌟" data-ar="تهانينا! أنت منقذ للجلد! 🌟">Congratulations! You are a Skin Savior! 🌟</div>
+    <div id="finalScore"></div>
+    <button id="restartBtn" aria-label="Play Again" data-en="Play Again" data-ar="العب مرة أخرى">Play Again</button>
+  </section>
+
+</div>
+
+<script>
+  const welcomeScreen = document.getElementById('welcomeScreen');
+  const welcomeStartBtn = document.getElementById('welcomeStartBtn');
+  const gameScreen = document.getElementById('gameScreen');
+  const endScreen = document.getElementById('endScreen');
+  const restartBtn = document.getElementById('restartBtn');
+  const interventionSection = document.getElementById('interventionSection');
+  const stageHeader = document.getElementById('stageHeader');
+  const stageImage = document.getElementById('stageImage');
+  const interventionsDiv = document.getElementById('interventions');
+  const feedbackEl = document.getElementById('feedback');
+  const nextStageBtn = document.getElementById('nextStageBtn');
+  const finalScoreEl = document.getElementById('finalScore');
+  const languageToggle = document.getElementById('languageToggle');
+
+  let currentLanguage = 'en';
+
+  const translations = {
+    en: {
+      languageButton: 'العربية',
+      stages: {
+        1: {
+          header: 'Stage 1: Non-blanchable erythema',
+          interventions: [
+            {text: 'Apply moisturizing cream and inspect skin every 2 hours', correct: true},
+            {text: 'Leave patient in same position and monitor next week', correct: false},
+            {text: 'Use tight bandages to protect area', correct: false},
+          ]
+        },
+        2: {
+          header: 'Stage 2: Partial thickness skin loss',
+          interventions: [
+            {text: 'Clean wound gently and apply appropriate dressing', correct: true},
+            {text: 'Expose wound to air without dressing', correct: false},
+            {text: 'Apply heat packs to accelerate healing', correct: false},
+          ]
+        },
+        3: {
+          header: 'Stage 3: Full thickness skin loss',
+          interventions: [
+            {text: 'Debride necrotic tissue and provide pressure relief', correct: true},
+            {text: 'Massage the ulcer vigorously', correct: false},
+            {text: 'Ignore pain and continue activity', correct: false},
+          ]
+        },
+        4: {
+          header: 'Stage 4: Full thickness tissue loss',
+          interventions: [
+            {text: 'Seek medical treatment and use advanced wound care', correct: true},
+            {text: 'Cover ulcer with thick cotton only', correct: false},
+            {text: 'Increase patient mobility without care', correct: false},
+          ]
+        }
+      },
+      feedback: {
+        correct: '✅ Correct intervention! +10 points',
+        incorrect: '❌ Incorrect intervention. -5 points'
+      },
+      finalScore: 'Your final score: '
+    },
+    ar: {
+      languageButton: 'English',
+      stages: {
+        1: {
+          header: 'المرحلة 1: احمرار غير قابل للتبييض',
+          interventions: [
+            {text: 'ضع كريم مرطب وافحص الجلد كل ساعتين', correct: true},
+            {text: 'اترك المريض في نفس الوضع وراقبه الأسبوع القادم', correct: false},
+            {text: 'استخدم ضمادات ضيقة لحماية المنطقة', correct: false},
+          ]
+        },
+        2: {
+          header: 'المرحلة 2: فقدان جزئي لسمك الجلد',
+          interventions: [
+            {text: 'نظف الجرح بلطف وضع الضمادة المناسبة', correct: true},
+            {text: 'اترك الجرح معرضاً للهواء بدون ضمادة', correct: false},
+            {text: 'ضع كمادات ساخنة لتسريع الشفاء', correct: false},
+          ]
+        },
+        3: {
+          header: 'المرحلة 3: فقدان كامل لسمك الجلد',
+          interventions: [
+            {text: 'أزل الأنسجة الميتة ووفر تخفيف الضغط', correct: true},
+            {text: 'دلك القرحة بقوة', correct: false},
+            {text: 'تجاهل الألم واستمر في النشاط', correct: false},
+          ]
+        },
+        4: {
+          header: 'المرحلة 4: فقدان كامل لسمك الأنسجة',
+          interventions: [
+            {text: 'اطلب العلاج الطبي واستخدم العناية المتقدمة بالجروح', correct: true},
+            {text: 'غطِ القرحة بالقطن السميك فقط', correct: false},
+            {text: 'زد حركة المريض دون عناية', correct: false},
+          ]
+        }
+      },
+      feedback: {
+        correct: '✅ تدخل صحيح! +10 نقاط',
+        incorrect: '❌ تدخل خاطئ. -5 نقاط'
+      },
+      finalScore: 'نتيجتك النهائية: '
+    }
+  };
+
+  let score = 0;
+  let answered = false;
+  let stageOrder = [1,2,3,4];
+  let stageIndex = 0;
+
+  languageToggle.onclick = () => {
+    currentLanguage = currentLanguage === 'en' ? 'ar' : 'en';
+    updateLanguage();
+  };
+
+  function updateLanguage() {
+    const lang = currentLanguage;
+    languageToggle.textContent = translations[lang].languageButton;
+    
+    // Update all elements with data-en and data-ar attributes
+    document.querySelectorAll('[data-en]').forEach(el => {
+      if (el.tagName === 'BUTTON' || el.tagName === 'INPUT') {
+        el.textContent = el.getAttribute('data-' + lang);
+      } else {
+        el.textContent = el.getAttribute('data-' + lang);
+      }
+    });
+
+    // Update direction for Arabic
+    if (lang === 'ar') {
+      document.documentElement.setAttribute('dir', 'rtl');
+      document.documentElement.setAttribute('lang', 'ar');
+    } else {
+      document.documentElement.setAttribute('dir', 'ltr');
+      document.documentElement.setAttribute('lang', 'en');
+    }
+  }
+
+  welcomeStartBtn.onclick = () => {
+    welcomeScreen.style.display = 'none';
+    gameScreen.style.display = 'flex';
+    stageIndex = 0;
+    showInterventions(stageOrder[stageIndex]);
+  };
+
+  restartBtn.onclick = () => {
+    score = 0;
+    stageIndex = 0;
+    endScreen.style.display = 'none';
+    welcomeScreen.style.display = 'block';
+  };
+
+  function showInterventions(stage) {
+    feedbackEl.textContent = '';
+    nextStageBtn.style.display = 'none';
+    answered = false;
+    
+    const stageData = translations[currentLanguage].stages[stage];
+    stageHeader.textContent = stageData.header;
+    
+    // Set stage image
+    stageImage.src = `stage_${stage}_final.png`;
+    
+    interventionsDiv.innerHTML = '';
+
+    stageData.interventions.forEach(({text, correct}) => {
+      const b = document.createElement('button');
+      b.classList.add('intervention-btn');
+      b.textContent = text;
+      b.dataset.correct = correct;
+      b.onclick = handleIntervention;
+      interventionsDiv.appendChild(b);
+    });
+  }
+
+  function handleIntervention(e) {
+    if (answered) return;
+    answered = true;
+    const btn = e.target;
+    const correct = btn.dataset.correct === 'true';
+    const buttons = document.querySelectorAll('.intervention-btn');
+    
+    if (correct) {
+      btn.classList.add('correct');
+      feedbackEl.textContent = translations[currentLanguage].feedback.correct;
+      score += 10;
+    } else {
+      btn.classList.add('wrong');
+      feedbackEl.textContent = translations[currentLanguage].feedback.incorrect;
+      score = Math.max(0, score - 5);
+    }
+    
+    buttons.forEach(b => {
+      b.disabled = true;
+      if (b.dataset.correct === 'true' && b !== btn){
+        b.classList.add('correct');
+      }
+    });
+    nextStageBtn.style.display = 'block';
+  }
+
+  nextStageBtn.onclick = () => {
+    stageIndex++;
+    if (stageIndex >= stageOrder.length) {
+      endGame();
+    } else {
+      showInterventions(stageOrder[stageIndex]);
+      stageHeader.scrollIntoView({behavior:'smooth'});
+    }
+  };
+
+  function endGame(){
+    gameScreen.style.display = 'none';
+    endScreen.style.display = 'flex';
+    finalScoreEl.textContent = translations[currentLanguage].finalScore + score + ' ' + (currentLanguage === 'ar' ? 'نقطة' : 'points');
+  }
+</script>
+
+</body>
+</html>
